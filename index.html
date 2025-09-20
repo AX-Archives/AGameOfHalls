@@ -1,110 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A Game of Halls – Cozy Launcher</title>
-<style>
-  /* Base layout */
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f5f2e7;
-    color: #333;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  /* Banner image */
-  .banner {
-    width: 100%;
-    max-height: 300px;
-    overflow: hidden;
-  }
-  .banner img {
-    width: 100%;
-    object-fit: cover;
-  }
-
-  /* Main content container */
-  .container {
-    max-width: 800px;
-    padding: 20px;
-    margin-top: 20px;
-  }
-
-  h1 {
-    text-align: center;
-    margin-bottom: 10px;
-  }
-
-  p.description {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
-  /* Scrollable version selector */
-  .versions-scroll {
-    display: flex;
-    overflow-x: auto;
-    gap: 12px;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-  }
-  .versions-scroll a {
-    flex: 0 0 auto;
-    padding: 12px 20px;
-    background: #d9c9a3;
-    color: #333;
-    text-decoration: none;
-    border-radius: 10px;
-    transition: background 0.3s;
-    white-space: nowrap;
-  }
-  .versions-scroll a:hover {
-    background: #c2b28c;
-  }
-
-  /* Play button */
-  .play-button {
-    display: block;
-    width: 200px;
-    margin: 0 auto 30px;
-    padding: 14px 0;
-    background: #8c6b3c;
-    color: #fff;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 12px;
-    font-weight: bold;
-    transition: background 0.3s;
-  }
-  .play-button:hover {
-    background: #a17d50;
-  }
-
-  /* Update log */
-  .update-log {
-    background: #fff8f0;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 40px;
-  }
-  .update-log h2 {
-    margin-top: 0;
-  }
-  .update-log ul {
-    padding-left: 20px;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Game of Halls – Cozy Launcher</title>
+  <!-- Link to external CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <!-- Banner -->
   <div class="banner">
-    <!-- Replace src with your image path -->
+    <!-- Replace 'banner.jpg' with your own image -->
     <img src="banner.jpg" alt="Game Banner">
   </div>
 
@@ -112,44 +19,45 @@
   <div class="container">
     <h1>A Game of Halls</h1>
 
+    <!-- Custom description text -->
     <p class="description">
-      Welcome to A Game of Halls! Explore, survive, and have fun in this cozy adventure.
-      Replace this text with your own custom paragraph describing the game.
+      This is a game, made and created solely by Faizan Meah, and accounts related to his games are kept by "AX-Archives".
+      In AGoH, you traverse near endless halls until you meet your inevitable fate, death.
     </p>
 
     <!-- Scrollable version selector -->
     <div class="versions-scroll">
-      <a href="AGoH%20(V.100).html">AGoH (V.100)</a>
-      <a href="AGoH%20(V.101).html">AGoH (V.101)</a>
-      <a href="AGoH%20(V.102).html">AGoH (V.102)</a>
-      <a href="AGoH%20(V.103).html">AGoH (V.103)</a>
+      <a href="AGoH (V.100).html">AGoH (V.100)</a>
+      <a href="AGoH (V.101).html">AGoH (V.101)</a>
+      <a href="AGoH (V.102).html">AGoH (V.102)</a>
+      <a href="AGoH (V.103).html">AGoH (V.103)</a>
     </div>
 
     <!-- Play button -->
-    <a id="play-button" class="play-button" href="AGoH%20(V.100).html">Play Latest Version</a>
+    <a id="play-button" class="play-button" href="AGoH (V.103).html">Play Latest Version</a>
 
     <!-- Update log -->
     <div class="update-log">
       <h2>Update Log</h2>
       <ul>
-        <li>V.100 – Initial release.</li>
-        <li>V.101 – Bug fixes and minor improvements.</li>
-        <li>V.102 – Added new rooms and challenges.</li>
-        <li>V.103 – Performance improvements and extra polish.</li>
+        <li>V.100 – Base game.</li>
+        <li>V.101 – Added secret boss phase plus speedrun mode.</li>
+        <li>V.102 – Added new floor.</li>
+        <li>V.103 – Added 2 new items.</li>
       </ul>
     </div>
   </div>
 
   <script>
-    // Make the play button open the **latest selected version** automatically
+    // Make the play button open the latest selected version
     const playButton = document.getElementById('play-button');
     const versionLinks = document.querySelectorAll('.versions-scroll a');
 
     versionLinks.forEach(link => {
       link.addEventListener('click', e => {
-        e.preventDefault(); // Prevent default navigation
+        e.preventDefault(); // Prevent immediate navigation
         const file = link.getAttribute('href');
-        playButton.setAttribute('href', file); // Update play button to selected version
+        playButton.setAttribute('href', file); // Update play button
       });
     });
   </script>
