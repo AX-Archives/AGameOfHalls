@@ -1,4 +1,4 @@
-/* Dark theme body */
+/* Dark theme body, center everything */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #121212;
@@ -7,18 +7,24 @@ body {
   padding: 0;
   display: flex;
   justify-content: center;
+  align-items: center; /* Vertical centering */
   min-height: 100vh;
 }
 
+/* Launcher container centered */
 .launcher-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 90%;
   max-width: 1000px;
-  margin-top: 40px;
 }
 
-/* Main layout */
+/* Main layout: versions + description side by side, centered */
 .main-content {
   display: flex;
+  justify-content: center; /* Horizontal centering */
+  align-items: flex-start;
   gap: 20px;
 }
 
@@ -78,8 +84,8 @@ body {
 .description-box p {
   line-height: 1.5;
   color: #ddd;
-  margin: 10px 0 20px 0; /* Comfortable space below title */
-  text-align: left; /* Left-aligned */
+  margin: 10px 0 20px 0;
+  text-align: left; /* Left-aligned paragraph under title */
 }
 
 /* Update log */
@@ -126,7 +132,7 @@ body {
   background-color: #66bb6a;
 }
 
-/* Scrollbar styling for versions panel and update log */
+/* Scrollbar styling */
 .versions-panel::-webkit-scrollbar,
 .update-log::-webkit-scrollbar {
   width: 8px;
