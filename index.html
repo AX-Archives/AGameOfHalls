@@ -72,7 +72,28 @@
       playButton.textContent = `Play Selected Version ${versionText}`;
     });
   });
+
+  // --- Auto-refresh if website changes ---
+  let cachedHTML = null;
+
+  async function checkWebsiteUpdate() {
+    try {
+      const response = await fetch(window.location.href, { cache: "no-store" });
+      const text = await response.text();
+
+      if (cachedHTML && cachedHTML !== text) {
+        location.reload(); // reload if website content changed
+      }
+      cachedHTML = text;
+    } catch (err) {
+      console.error("Could not check website update:", err);
+    }
+  }
+
+  // Check every 1 second
+  setInterval(checkWebsiteUpdate, 1000);
 </script>
+
 
 </body>
 </html>
