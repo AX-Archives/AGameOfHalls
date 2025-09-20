@@ -13,11 +13,11 @@
   <!-- Main content -->
   <div class="main-content">
 
-    <!-- Version selector (side scroll) -->
+    <!-- Versions panel -->
     <div class="versions-panel">
       <h2>Versions</h2>
       <div class="versions-scroll">
-        <a href="AGoH (V.100).html">AGoH (V.100)</a>
+        <a href="AGoH (V.100).html" class="selected">AGoH (V.100)</a>
         <a href="AGoH (V.101).html">AGoH (V.101)</a>
         <a href="AGoH (V.102).html">AGoH (V.102)</a>
         <a href="AGoH (V.103).html">AGoH (V.103)</a>
@@ -30,7 +30,7 @@
       <p>
         AGoH and related games are primarily compiled by “AX-Archives”; any similar titles by accounts using this name are associated. In AGoH, you traverse intricate halls, face challenges, and ultimately meet your fate in a journey of exploration and consequence.
       </p>
-      <a id="play-button" class="play-button disabled" href="#">Play Selected Version</a>
+      <a id="play-button" class="play-button" href="AGoH (V.100).html">Play Selected Version</a>
     </div>
 
   </div>
@@ -45,8 +45,15 @@
     link.addEventListener('click', e => {
       e.preventDefault();
       const file = link.getAttribute('href');
+
+      // Remove "selected" class from all versions
+      versionLinks.forEach(v => v.classList.remove('selected'));
+
+      // Add "selected" class to clicked version
+      link.classList.add('selected');
+
+      // Update play button
       playButton.setAttribute('href', file);
-      playButton.classList.remove('disabled'); // Enable the button
     });
   });
 </script>
