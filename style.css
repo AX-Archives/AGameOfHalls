@@ -55,10 +55,8 @@ body {
 .versions-scroll a:hover {
   background-color: #3a3a3a;
 }
-
-/* Selected version highlight */
 .versions-scroll a.selected {
-  background-color: #4caf50; /* Bright green */
+  background-color: #4caf50;
   color: #fff;
   box-shadow: 0 0 10px #4caf50;
 }
@@ -71,7 +69,6 @@ body {
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 .description-box h2 {
@@ -81,6 +78,31 @@ body {
 .description-box p {
   line-height: 1.5;
   color: #ddd;
+  margin: 10px 0 20px 0; /* Comfortable space below title */
+  text-align: left; /* Left-aligned */
+}
+
+/* Update log */
+.update-log {
+  background-color: #2a2a2a;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+.update-log h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: #fff;
+}
+.update-log ul {
+  padding-left: 20px;
+  margin: 0;
+  color: #ddd;
+}
+.update-log li {
+  margin-bottom: 6px;
 }
 
 /* Play button */
@@ -93,7 +115,6 @@ body {
   font-weight: bold;
   text-decoration: none;
   transition: background 0.3s, color 0.3s;
-  margin-top: 15px;
   background-color: #555; /* Disabled default */
   color: #999;
 }
@@ -105,14 +126,17 @@ body {
   background-color: #66bb6a;
 }
 
-/* Scrollbar styling for versions panel */
-.versions-panel::-webkit-scrollbar {
+/* Scrollbar styling for versions panel and update log */
+.versions-panel::-webkit-scrollbar,
+.update-log::-webkit-scrollbar {
   width: 8px;
 }
-.versions-panel::-webkit-scrollbar-thumb {
+.versions-panel::-webkit-scrollbar-thumb,
+.update-log::-webkit-scrollbar-thumb {
   background: #555;
   border-radius: 4px;
 }
-.versions-panel::-webkit-scrollbar-track {
+.versions-panel::-webkit-scrollbar-track,
+.update-log::-webkit-scrollbar-track {
   background: #1f1f1f;
 }
