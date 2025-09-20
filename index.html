@@ -17,10 +17,10 @@
     <div class="versions-panel">
       <h2>Versions</h2>
       <div class="versions-scroll">
-        <a href="AGoH (V.100).html" class="selected">AGoH (V.100)</a>
-        <a href="AGoH (V.101).html">AGoH (V.101)</a>
-        <a href="AGoH (V.102).html">AGoH (V.102)</a>
-        <a href="AGoH (V.103).html">AGoH (V.103)</a>
+        <a href="AGoH (V1.00).html">AGoH (V1.00)</a>
+        <a href="AGoH (V1.01).html">AGoH (V1.01)</a>
+        <a href="AGoH (V1.02).html">AGoH (V1.02)</a>
+        <a href="AGoH (V1.03).html">AGoH (V1.03)</a>
       </div>
     </div>
 
@@ -30,7 +30,7 @@
       <p>
         AGoH and related games are primarily compiled by “AX-Archives”; any similar titles by accounts using this name are associated. In AGoH, you traverse intricate halls, face challenges, and ultimately meet your fate in a journey of exploration and consequence.
       </p>
-      <a id="play-button" class="play-button" href="AGoH (V.100).html">Play Selected Version</a>
+      <a id="play-button" class="play-button disabled" href="#">Play Selected Version</a>
     </div>
 
   </div>
@@ -45,15 +45,18 @@
     link.addEventListener('click', e => {
       e.preventDefault();
       const file = link.getAttribute('href');
+      const versionText = link.textContent.replace("AGoH ", ""); // e.g., "(V1.00)"
 
       // Remove "selected" class from all versions
       versionLinks.forEach(v => v.classList.remove('selected'));
 
-      // Add "selected" class to clicked version
+      // Highlight clicked version
       link.classList.add('selected');
 
-      // Update play button
+      // Enable and update play button
+      playButton.classList.remove('disabled');
       playButton.setAttribute('href', file);
+      playButton.textContent = `Play Selected Version ${versionText}`;
     });
   });
 </script>
