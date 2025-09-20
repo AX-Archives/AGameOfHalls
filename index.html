@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A Game of Halls</title>
+  <title>A Game of Halls – Launcher</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -20,6 +20,11 @@
     h1 {
       margin-bottom: 20px;
     }
+    .versions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
     a.button {
       display: inline-block;
       padding: 12px 24px;
@@ -28,6 +33,7 @@
       text-decoration: none;
       border-radius: 8px;
       transition: background 0.3s;
+      font-size: 16px;
     }
     a.button:hover {
       background: #666;
@@ -36,7 +42,12 @@
 </head>
 <body>
   <h1>A Game of Halls</h1>
-  <p>Welcome! Click below to start the game.</p>
-  <a href="game.html" class="button">Play</a>
+  <p>Select a version to play:</p>
+  <div class="versions">
+    <a href="AGoH (V1.00).html" class="button">AGoH (V1.00)</a>
+    <a href="AGoH (V1.01).html" class="button">AGoH (V1.01)</a>
+    <a href="AGoH (V1.02).html" class="button">AGoH (V1.02)</a>
+    <a href="AGoH (V1.03).html" class="button">AGoH (V1.03)</a>
+  </div>
 </body>
 </html>
