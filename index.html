@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A Game of Halls – Launcher</title>
+<title>AGoH - Launcher</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -36,9 +36,9 @@
         <h3>Update Log</h3>
         <ul>
           <li>V1.00 – Initial release.</li>
-          <li>V1.01 – Added new "Insanity Boss" phase, along with speedrun feature.</li>
-          <li>V1.02 – Added new floor.</li>
-          <li>V1.03 – Minor bugfixes, along with two new items.</li>
+          <li>V1.01 – Added secret rooms.</li>
+          <li>V1.02 – Improved enemy AI.</li>
+          <li>V1.03 – Added cozy music and visual polish.</li>
         </ul>
       </div>
 
@@ -60,13 +60,9 @@
       const file = link.getAttribute('href');
       const versionText = link.textContent.replace("AGoH ", "");
 
-      // Remove "selected" class from all versions
       versionLinks.forEach(v => v.classList.remove('selected'));
-
-      // Highlight clicked version
       link.classList.add('selected');
 
-      // Enable and update play button
       playButton.classList.remove('disabled');
       playButton.setAttribute('href', file);
       playButton.textContent = `Play Selected Version ${versionText}`;
@@ -82,7 +78,7 @@
       const text = await response.text();
 
       if (cachedHTML && cachedHTML !== text) {
-        location.reload(); // reload if website content changed
+        location.reload();
       }
       cachedHTML = text;
     } catch (err) {
@@ -90,10 +86,9 @@
     }
   }
 
-  // Check every 1 second
   setInterval(checkWebsiteUpdate, 1000);
 </script>
 
-
 </body>
 </html>
+
