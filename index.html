@@ -1,66 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A Game of Halls – Cozy Launcher</title>
-  <!-- Link to external CSS -->
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Game of Halls – Launcher</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Banner -->
-  <div class="banner">
-    <!-- Replace 'banner.jpg' with your own image -->
-    <img src="banner.png" alt="Game Banner">
-  </div>
+<div class="launcher-container">
 
-  <!-- Main container -->
-  <div class="container">
-    <h1>A Game of Halls</h1>
+  <!-- Main content -->
+  <div class="main-content">
 
-    <!-- Custom description text -->
-    <p class="description">
-      This is a game, made and created solely by Faizan Meah, and accounts related to his games are kept by "AX-Archives".
-      In AGoH, you traverse near endless halls until you meet your inevitable fate, death.
-    </p>
-
-    <!-- Scrollable version selector -->
-    <div class="versions-scroll">
-      <a href="AGoH (V.100).html">AGoH (V.100)</a>
-      <a href="AGoH (V.101).html">AGoH (V.101)</a>
-      <a href="AGoH (V.102).html">AGoH (V.102)</a>
-      <a href="AGoH (V.103).html">AGoH (V.103)</a>
+    <!-- Version selector (side scroll) -->
+    <div class="versions-panel">
+      <h2>Versions</h2>
+      <div class="versions-scroll">
+        <a href="AGoH (V.100).html">AGoH (V.100)</a>
+        <a href="AGoH (V.101).html">AGoH (V.101)</a>
+        <a href="AGoH (V.102).html">AGoH (V.102)</a>
+        <a href="AGoH (V.103).html">AGoH (V.103)</a>
+      </div>
     </div>
 
-    <!-- Play button -->
-    <a id="play-button" class="play-button" href="AGoH (V.103).html">Play Latest Version</a>
-
-    <!-- Update log -->
-    <div class="update-log">
-      <h2>Update Log</h2>
-      <ul>
-        <li>V.100 – Base game.</li>
-        <li>V.101 – Added secret boss phase plus speedrun mode.</li>
-        <li>V.102 – Added new floor.</li>
-        <li>V.103 – Added 2 new items.</li>
-      </ul>
+    <!-- Description box -->
+    <div class="description-box">
+      <h2>Description</h2>
+      <p>
+        AGoH, and related games, are mainly compiled by "AX-Archives". Any simillar or related games will be compiled by any account named as so.
+        In AGoH, you traverse halls and, eventually, meet your fate.
+      </p>
+      <a id="play-button" class="play-button disabled" href="#">Play Selected Version</a>
     </div>
+
   </div>
 
-  <script>
-    // Make the play button open the latest selected version
-    const playButton = document.getElementById('play-button');
-    const versionLinks = document.querySelectorAll('.versions-scroll a');
+</div>
 
-    versionLinks.forEach(link => {
-      link.addEventListener('click', e => {
-        e.preventDefault(); // Prevent immediate navigation
-        const file = link.getAttribute('href');
-        playButton.setAttribute('href', file); // Update play button
-      });
+<script>
+  const playButton = document.getElementById('play-button');
+  const versionLinks = document.querySelectorAll('.versions-scroll a');
+
+  versionLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const file = link.getAttribute('href');
+      playButton.setAttribute('href', file);
+      playButton.classList.remove('disabled'); // Enable the button
     });
-  </script>
+  });
+</script>
 
 </body>
 </html>
