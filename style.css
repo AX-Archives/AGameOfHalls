@@ -1,7 +1,18 @@
-/* General layout */
+/* Full-window dark launcher */
+:root{
+  --bg-0: #121212;
+  --bg-1: #1b1b1b;
+  --card: #1f1f1f;
+  --muted: #999;
+  --accent: #4caf50;
+  --accent-strong: #66bb6a;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
 body {
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  background: linear-gradient(135deg, #121212, #1b1b1b);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg,var(--bg-0),var(--bg-1));
   color: #eee;
   margin: 0;
   padding: 0;
@@ -9,104 +20,231 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  animation: fadeIn 0.8s ease-in;
+  overflow: hidden;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  animation: fadeIn 0.5s ease;
 }
-@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
+/* Launcher container fills window and scales */
 .launcher-container {
-  width: 95%;
+  width: 96%;
   max-width: 1400px;
-  height: 95%;
+  height: 96%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
+  align-items: stretch;
+  padding: 12px;
 }
 
-/* Main UI layout */
+/* Main UI: versions + right panel */
 .main-content {
-  flex: 1;
   display: flex;
-  gap: 20px;
-  min-height: 0;
+  gap: 16px;
+  flex: 1 1 auto;
+  min-height: 0; /* allows children to scroll properly */
+  align-items: stretch;
+  justify-content: center;
+  padding: 4px;
 }
 
-/* Versions panel */
+/* Versions panel: keep a reasonable width to fit long names */
 .versions-panel {
-  flex: 1;
-  background: #1f1f1f;
-  padding: 15px;
-  border-radius: 10px;
+  flex-basis: 280px;     /* preferred width */
+  min-width: 220px;      /* won't shrink below this */
+  max-width: 360px;
+  background: var(--card);
+  padding: 16px;
+  border-radius: 12px;
   overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
 }
-.versions-panel h2 { text-align: center; }
-.versions-scroll { display: flex; flex-direction: column; gap: 10px; }
+.versions-panel h2 {
+  margin: 0 0 8px;
+  text-align: center;
+  font-size: 1.05rem;
+}
+
+/* Version items: fill width and wrap long names */
+.versions-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
 .versions-scroll a {
+  display: block;
+  width: 100%;
   padding: 10px;
   background: #2a2a2a;
-  border-radius: 6px;
   color: #eee;
   text-decoration: none;
+  border-radius: 8px;
   text-align: center;
-  transition: 0.3s;
+  font-weight: 600;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+  white-space: normal;        /* allow wrapping */
+  word-break: break-word;     /* break long names */
+  line-height: 1.25;
 }
-.versions-scroll a:hover { background: #3a3a3a; }
-.versions-scroll a.selected {
-  background: #4caf50;
-  font-weight: bold;
-  box-shadow: 0 0 10px #4caf50;
+.versions-scroll a:hover {
+  transform: translateY(-2px);
+  background: #333;
 }
 
-/* Right panel */
+/* Highlight selected version (brighter + glow) */
+.versions-scroll a.selected {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 8px 30px rgba(76,175,80,0.18), 0 0 12px rgba(76,175,80,0.12);
+  transform: translateY(-2px) scale(1.01);
+}
+
+/* Right panel (description, update log, play) */
 .right-panel {
-  flex: 2;
+  flex: 2 1 0%;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
+  min-width: 0; /* allow content to shrink */
 }
+
+/* Description and update log cards */
 .description-box, .update-log {
-  background: #1f1f1f;
-  padding: 15px;
-  border-radius: 10px;
+  background: var(--card);
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
 }
-.description-box p { margin: 10px 0 0; color: #ddd; }
-.update-log ul { margin: 0; padding-left: 20px; }
-.update-log li { margin-bottom: 6px; }
+.description-box h2, .update-log h3 { margin: 0 0 8px; }
+.description-box p { margin: 0; color: #ddd; line-height: 1.5; text-align:left; }
+
+/* Update log: scrollable when long */
+.update-log {
+  max-height: 34vh;
+  overflow-y: auto;
+}
+.update-log ul { margin: 0; padding-left: 20px; color: #ddd; }
+.update-log li { margin-bottom: 8px; }
 
 /* Play button */
 .play-button {
-  padding: 14px;
-  text-align: center;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: 0.3s;
-  background: #555;
-  color: #999;
-}
-.play-button:not(.disabled) { background: #4caf50; color: #fff; }
-.play-button:not(.disabled):hover { background: #66bb6a; }
-
-/* Game container */
-.game-container {
-  flex: 1;
-  background: #000;
+  display: inline-block;
+  padding: 12px 16px;
   border-radius: 10px;
+  text-align: center;
+  background: #555;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 700;
+  transition: background .15s ease, transform .08s ease;
+  align-self: stretch;
+}
+.play-button:not(.disabled) {
+  background: var(--accent);
+  color: #fff;
+}
+.play-button:not(.disabled):hover {
+  background: var(--accent-strong);
+  transform: translateY(-2px);
+}
+
+/* Game container: docked small window at bottom; expands to fullscreen via .fullscreen */
+.game-container {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  width: min(1200px, 94%);
+  height: 28vh;
+  border-radius: 12px;
+  background: #000;
   overflow: hidden;
+  box-shadow: 0 18px 60px rgba(0,0,0,0.6);
   display: flex;
   flex-direction: column;
-  position: relative;
+  z-index: 1200;
+  transition: all .25s ease;
+  border: 1px solid rgba(255,255,255,0.04);
 }
 .game-container.hidden { display: none; }
-#game-frame {
-  flex: 1;
-  width: 100%;
-  height: 100%;
-  border: none;
+
+/* Fullscreen state for CSS fallback / extra styling */
+.game-container.fullscreen {
+  left: 0;
+  top: 0;
+  bottom: 0;
+  transform: none;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  z-index: 2147483647;
+}
+
+/* Iframe fits container */
+#game-frame { width: 100%; height: 100%; border: none; display: block; }
+
+/* Small overlay controls inside the dock */
+.game-controls {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  display:flex;
+  gap:8px;
+  align-items:center;
 }
 .fullscreen-hint {
-  text-align: center;
-  color: #aaa;
-  font-size: 14px;
-  padding: 5px;
-  background: #111;
+  background: rgba(0,0,0,0.45);
+  padding: 6px 10px;
+  border-radius: 8px;
+  color: #bbb;
+  font-size: 13px;
+  display: inline-block;
 }
+.icon-btn {
+  background: rgba(255,255,255,0.04);
+  border: none;
+  color: #ddd;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.icon-btn:hover { background: rgba(255,255,255,0.07); }
+
+/* Scrollbar styling */
+.versions-panel::-webkit-scrollbar,
+.update-log::-webkit-scrollbar,
+.game-container::-webkit-scrollbar {
+  width: 10px;
+}
+.versions-panel::-webkit-scrollbar-thumb,
+.update-log::-webkit-scrollbar-thumb,
+.game-container::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 6px;
+}
+.versions-panel::-webkit-scrollbar-track,
+.update-log::-webkit-scrollbar-track,
+.game-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Responsive: stack panels on narrow viewports */
+@media (max-width: 880px) {
+  .main-content {
+    flex-direction: column;
+    align-items: stretch;
+    overflow-y: auto;
+  }
+  .versions-panel { order: 2; width: 100%; max-width:none; }
+  .right-panel { order: 1; }
+  .game-container { left: 50%; transform: translateX(-50%); width: 96%; height: 30vh; bottom: 12px; }
+}
+
+/* If user closes fullscreen via browser, ensure .fullscreen class removed */
+:root { --safe-area-inset-bottom: env(safe-area-inset-bottom); }
