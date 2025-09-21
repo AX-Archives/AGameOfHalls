@@ -1,302 +1,130 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>AGoH - Launcher</title>
-<link rel="stylesheet" href="style.css" />
-<style>
-/* === Center launcher container === */
 body {
   margin: 0;
-  background-color: #121212;
+  background: linear-gradient(135deg, #0d0d0d, #1a1a1a, #2b2b2b);
   color: #eee;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.launcher-container {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding: 20px;
+  align-items: center;
   min-height: 100vh;
-  box-sizing: border-box;
 }
 
-/* Main content layout */
-.main-content {
-  display: flex;
-  gap: 30px; /* space between version panel and right panel */
-  width: 90%;
-  max-width: 1400px;
-}
-
-/* Versions panel */
-.versions-panel {
-  flex: 0 0 250px; /* wider fixed width */
-  background: #1e1e1e;
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-.versions-panel h2 {
-  margin-top: 0;
+.launcher {
+  max-width: 1100px;
+  width: 95%;
   text-align: center;
 }
 
-.versions-scroll {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  overflow-y: auto;
-  max-height: 60vh;
-  padding-right: 8px; /* space for scrollbar */
+h1 {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
 }
 
-.versions-scroll a {
-  display: block;
-  padding: 10px;
-  background: #2a2a2a;
-  color: #eee;
-  text-decoration: none;
-  border-radius: 8px;
-  text-align: center;
-  transition: 0.2s;
-}
-
-.versions-scroll a:hover,
-.versions-scroll a.selected {
-  background: #3c3c3c;
-  font-weight: bold;
-}
-
-/* Right panel layout */
-.right-panel {
-  flex: 1 1 0%;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  min-width: 0;
-  align-items: center; /* center right panel content */
-}
-
-/* Description and update log */
-.description-box, .update-log {
-  width: 100%;
-  background: #1e1e1e;
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-.description-box p {
-  margin-top: 8px;
+.description {
+  max-width: 700px;
+  margin: 0 auto 20px auto;
   line-height: 1.5;
 }
 
-/* Play button */
-.play-button {
-  display: inline-block;
-  padding: 12px 24px;
-  background: #555;
-  color: #eee;
+.content {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-bottom: 20px;
+}
+
+.versions {
+  flex: 1;
+  max-width: 220px;
+}
+
+.versions ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 250px;
+  overflow-y: auto;
+  background: #222;
   border-radius: 8px;
-  text-decoration: none;
+}
+
+.versions li {
+  padding: 10px;
+  border-bottom: 1px solid #333;
   cursor: pointer;
-  transition: 0.2s;
 }
 
-.play-button:hover:not(.disabled) {
-  background: #777;
+.versions li:hover {
+  background: #333;
 }
 
-.play-button.disabled {
-  opacity: 0.5;
+.versions li.selected {
+  background: #4caf50;
+  font-weight: bold;
+}
+
+.info {
+  flex: 2;
+  text-align: left;
+}
+
+.buttons {
+  display: flex;
+  gap: 12px;
+  margin: 15px 0;
+}
+
+button,
+.download-btn,
+.return-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  background: #2e7d32;
+  color: white;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+button:disabled,
+.download-btn.disabled {
+  background: #555;
   cursor: not-allowed;
 }
 
-/* Game container */
+button:hover:enabled,
+.download-btn:hover,
+.return-btn:hover {
+  background: #388e3c;
+}
+
+.update-log {
+  margin-top: 20px;
+  max-height: 180px;
+  overflow-y: auto;
+  background: #222;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.update-log ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
 .game-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+iframe {
   width: 100%;
-  height: 50vh;
-  border-radius: 12px;
-  background: #000;
-  overflow: hidden;
-  box-shadow: 0 18px 60px rgba(0,0,0,0.6);
-  margin-top: 8px;
+  max-width: 700px;
+  height: 500px;
+  border-radius: 8px;
+  border: 2px solid #333;
+  background: black;
 }
-
-#game-frame {
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-.game-container.fullscreen {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  border-radius: 0;
-  z-index: 2147483647;
-}
-</style>
-</head>
-<body>
-
-<div class="launcher-container">
-
-  <div class="main-content">
-
-    <!-- Versions panel (newest first) -->
-    <div class="versions-panel" role="navigation" aria-label="Versions">
-      <h2>Versions</h2>
-      <div class="versions-scroll">
-        <a href="AGoH (V1.03).html">AGoH (V1.03)</a>
-        <a href="AGoH (V1.02).html">AGoH (V1.02)</a>
-        <a href="AGoH (V1.01).html">AGoH (V1.01)</a>
-        <a href="AGoH (V1.00).html">AGoH (V1.00)</a>
-      </div>
-    </div>
-
-    <!-- Right panel -->
-    <div class="right-panel">
-
-      <!-- Description -->
-      <div class="description-box">
-        <h2>Description</h2>
-        <p>
-          AGoH and related games are primarily compiled by “AX-Archives”; any similar titles by accounts using this name are associated.
-          In AGoH, you traverse intricate halls, face challenges, and ultimately meet your fate in a journey of exploration and consequence.
-        </p>
-      </div>
-
-      <!-- Update log -->
-      <div class="update-log">
-        <h3>Update Log</h3>
-        <ul>
-          <li>V1.03 – Added two new items, Radar and Battery, along with dialogue bugfix.</li>
-          <li>V1.02 – Added a new floor.</li>
-          <li>V1.01 – Added new final boss, along with speedrun button.</li>
-          <li>V1.00 – Initial release.</li>
-        </ul>
-      </div>
-
-      <!-- Play button -->
-      <a id="play-button" class="play-button disabled" href="#" role="button" aria-disabled="true">
-        Play Selected Version
-      </a>
-
-      <!-- Game iframe docked below -->
-      <div id="game-container" class="game-container hidden" aria-hidden="true">
-        <iframe id="game-frame" src="" frameborder="0" allow="autoplay; fullscreen"></iframe>
-        <div class="game-controls">
-          <span class="fullscreen-hint">Press <strong>F10</strong> to toggle fullscreen</span>
-          <button id="close-game" class="icon-btn" title="Close game">✕</button>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-</div>
-
-<!-- === Script === -->
-<script>
-const playButton = document.getElementById('play-button');
-const versionLinks = document.querySelectorAll('.versions-scroll a');
-const gameContainer = document.getElementById('game-container');
-const gameFrame = document.getElementById('game-frame');
-const closeGameBtn = document.getElementById('close-game');
-
-// Version selection
-versionLinks.forEach(link => {
-  link.addEventListener('click', e => {
-    e.preventDefault();
-    versionLinks.forEach(v => v.classList.remove('selected'));
-    link.classList.add('selected');
-
-    const file = link.getAttribute('href');
-    const versionText = link.textContent.replace("AGoH ", "");
-    playButton.classList.remove('disabled');
-    playButton.setAttribute('aria-disabled', 'false');
-    playButton.dataset.file = file;
-    playButton.textContent = `Play Selected Version ${versionText}`;
-  });
-});
-
-// Play button: load game and auto fullscreen
-playButton.addEventListener('click', async e => {
-  e.preventDefault();
-  if (playButton.classList.contains('disabled')) return;
-
-  const file = playButton.dataset.file;
-  if (!file) return;
-
-  gameFrame.src = file;
-  gameContainer.classList.remove('hidden');
-  gameContainer.setAttribute('aria-hidden', 'false');
-
-  try {
-    await gameContainer.requestFullscreen();
-    gameContainer.classList.add('fullscreen');
-  } catch(err) {
-    gameContainer.classList.remove('fullscreen');
-  }
-});
-
-// Close game
-closeGameBtn.addEventListener('click', () => {
-  gameContainer.classList.add('hidden');
-  gameContainer.setAttribute('aria-hidden','true');
-  gameFrame.src='';
-  if(document.fullscreenElement) document.exitFullscreen().catch(()=>{});
-  gameContainer.classList.remove('fullscreen');
-});
-
-// F10 toggle fullscreen
-document.addEventListener('keydown', async e => {
-  if (e.key==='F10'||e.keyCode===121) {
-    e.preventDefault();
-    if(gameContainer.classList.contains('hidden')) return;
-    try{
-      if(!document.fullscreenElement){
-        await gameContainer.requestFullscreen();
-        gameContainer.classList.add('fullscreen');
-      } else{
-        await document.exitFullscreen();
-        gameContainer.classList.remove('fullscreen');
-      }
-    } catch(err){
-      gameContainer.classList.toggle('fullscreen');
-    }
-  }
-});
-
-document.addEventListener('fullscreenchange', ()=>{
-  if(!document.fullscreenElement) gameContainer.classList.remove('fullscreen');
-});
-
-// Auto-refresh
-let cachedHTML=null;
-async function checkWebsiteUpdate(){
-  try{
-    const resp=await fetch(window.location.href,{cache:"no-store"});
-    const text=await resp.text();
-    if(cachedHTML && cachedHTML!==text) location.reload();
-    cachedHTML=text;
-  }catch(err){ console.error("Update check failed:",err); }
-}
-setInterval(checkWebsiteUpdate,1000);
-
-// Accessibility: Enter selects version
-versionLinks.forEach(a=>{
-  a.setAttribute('tabindex','0');
-  a.addEventListener('keypress', ev => { if(ev.key==='Enter') a.click(); });
-});
-</script>
-
-</body>
-</html>
