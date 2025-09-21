@@ -1,33 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AGoH - Launcher</title>
-<link rel="stylesheet" href="style.css" />
+
+<!-- Prevent caching to avoid old redirects -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
 <style>
-/* ===== Game container adjusted to right panel ===== */
-.right-panel {
-  flex: 2 1 0%;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-width: 0;
-  position: relative; /* for game container positioning */
+/* --- Dark theme & font --- */
+body {
+  margin: 0;
+  background-color: #121212;
+  color: #eee;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* --- Center launcher container --- */
+.launcher-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* --- Main content layout --- */
+.main-content {
+  display: flex;
+  gap: 30px;
+  width: 90%;
+  max-width: 1400px;
+}
+
+/* --- Version panel --- */
+.versions-panel {
+  flex: 0 0 250px;
+  background: #1e1e1e;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.versions-panel h2 {
+  text-align: center;
+  margin-top: 0;
+}
+
+.versions-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.versions-scroll a {
+  display: block;
+  padding: 10px;
+  background: #2a2a2a;
+  color: #eee;
+  text-decoration: none;
+  border-radius: 8px;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.versions-scroll a:hover,
+.versions-scroll a.selected {
+  background: #3c3c3c;
+  font-weight: bold;
+}
+
+/* --- Right panel --- */
+.right-panel {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+/* --- Description & update log --- */
+.description-box, .update-log {
+  width: 100%;
+  background: #1e1e1e;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.description-box p {
+  line-height: 1.5;
+  margin-top: 8px;
+}
+
+/* --- Play button --- */
+.play-button {
+  display: inline-block;
+  padding: 12px 24px;
+  background: #555;
+  color: #eee;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.play-button:hover:not(.disabled) {
+  background: #777;
+}
+
+.play-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- Game container --- */
 .game-container {
-  position: relative;  /* docked within right panel */
-  width: 100%;         /* match right panel width */
-  height: 28vh;
+  width: 100%;
+  height: 50vh;
   border-radius: 12px;
   background: #000;
   overflow: hidden;
   box-shadow: 0 18px 60px rgba(0,0,0,0.6);
-  display: flex;
-  flex-direction: column;
-  transition: all .25s ease;
-  margin-top: 8px;    /* spacing below play button */
+  margin-top: 8px;
+}
+
+#game-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
 .game-container.fullscreen {
@@ -41,14 +149,13 @@
 }
 </style>
 </head>
+
 <body>
-
 <div class="launcher-container">
-
   <div class="main-content">
-
-    <!-- Versions panel (newest first) -->
-    <div class="versions-panel" role="navigation" aria-label="Versions">
+    
+    <!-- Version panel (newest first) -->
+    <div class="versions-panel">
       <h2>Versions</h2>
       <div class="versions-scroll">
         <a href="AGoH (V1.03).html">AGoH (V1.03)</a>
@@ -57,11 +164,9 @@
         <a href="AGoH (V1.00).html">AGoH (V1.00)</a>
       </div>
     </div>
-
-    <!-- Right-side UI -->
+    
+    <!-- Right panel -->
     <div class="right-panel">
-
-      <!-- Description -->
       <div class="description-box">
         <h2>Description</h2>
         <p>
@@ -69,8 +174,7 @@
           In AGoH, you traverse intricate halls, face challenges, and ultimately meet your fate in a journey of exploration and consequence.
         </p>
       </div>
-
-      <!-- Update log (newest first) -->
+      
       <div class="update-log">
         <h3>Update Log</h3>
         <ul>
@@ -80,120 +184,53 @@
           <li>V1.00 – Initial release.</li>
         </ul>
       </div>
-
-      <!-- Play button -->
-      <a id="play-button" class="play-button disabled" href="#" role="button" aria-disabled="true">
-        Play Selected Version
-      </a>
-
-      <!-- Game iframe docked below -->
-      <div id="game-container" class="game-container hidden" aria-hidden="true">
+      
+      <a id="play-button" class="play-button disabled" href="#">Play Selected Version</a>
+      
+      <div id="game-container" class="game-container hidden">
         <iframe id="game-frame" src="" frameborder="0" allow="autoplay; fullscreen"></iframe>
-        <div class="game-controls">
-          <span class="fullscreen-hint">Press <strong>F10</strong> to toggle fullscreen</span>
-          <button id="close-game" class="icon-btn" title="Close game">✕</button>
-        </div>
       </div>
-
     </div>
-
   </div>
 </div>
 
-<!-- === Script === -->
 <script>
+// Version selection
 const playButton = document.getElementById('play-button');
 const versionLinks = document.querySelectorAll('.versions-scroll a');
 const gameContainer = document.getElementById('game-container');
 const gameFrame = document.getElementById('game-frame');
-const closeGameBtn = document.getElementById('close-game');
 
-// Version selection
 versionLinks.forEach(link => {
   link.addEventListener('click', e => {
     e.preventDefault();
     versionLinks.forEach(v => v.classList.remove('selected'));
     link.classList.add('selected');
-
-    const file = link.getAttribute('href');
-    const versionText = link.textContent.replace("AGoH ", "");
     playButton.classList.remove('disabled');
-    playButton.setAttribute('aria-disabled', 'false');
-    playButton.dataset.file = file;
-    playButton.textContent = `Play Selected Version ${versionText}`;
+    playButton.dataset.file = link.href;
+    playButton.textContent = `Play Selected Version ${link.textContent.replace("AGoH ", "")}`;
   });
 });
 
-// Play button: load game and auto fullscreen
-playButton.addEventListener('click', async e => {
+// Play button
+playButton.addEventListener('click', e => {
   e.preventDefault();
-  if (playButton.classList.contains('disabled')) return;
-
-  const file = playButton.dataset.file;
-  if (!file) return;
-
-  gameFrame.src = file;
+  if(playButton.classList.contains('disabled')) return;
+  gameFrame.src = playButton.dataset.file;
   gameContainer.classList.remove('hidden');
-  gameContainer.setAttribute('aria-hidden', 'false');
-
-  try {
-    await gameContainer.requestFullscreen();
-    gameContainer.classList.add('fullscreen');
-  } catch(err) {
-    gameContainer.classList.remove('fullscreen'); // fallback
-  }
 });
 
-// Close game
-closeGameBtn.addEventListener('click', () => {
-  gameContainer.classList.add('hidden');
-  gameContainer.setAttribute('aria-hidden','true');
-  gameFrame.src='';
-  if(document.fullscreenElement) document.exitFullscreen().catch(()=>{});
-  gameContainer.classList.remove('fullscreen');
-});
-
-// F10 toggle fullscreen
-document.addEventListener('keydown', async e => {
-  if (e.key==='F10'||e.keyCode===121) {
-    e.preventDefault();
-    if(gameContainer.classList.contains('hidden')) return;
-    try{
-      if(!document.fullscreenElement){
-        await gameContainer.requestFullscreen();
-        gameContainer.classList.add('fullscreen');
-      } else{
-        await document.exitFullscreen();
-        gameContainer.classList.remove('fullscreen');
-      }
-    } catch(err){
-      gameContainer.classList.toggle('fullscreen');
-    }
-  }
-});
-
-document.addEventListener('fullscreenchange', ()=>{
-  if(!document.fullscreenElement) gameContainer.classList.remove('fullscreen');
-});
-
-// Auto-refresh
-let cachedHTML=null;
+// Auto-refresh every second
+let cachedHTML = null;
 async function checkWebsiteUpdate(){
   try{
-    const resp=await fetch(window.location.href,{cache:"no-store"});
-    const text=await resp.text();
-    if(cachedHTML && cachedHTML!==text) location.reload();
-    cachedHTML=text;
-  }catch(err){ console.error("Update check failed:",err); }
+    const resp = await fetch(window.location.href, {cache:"no-store"});
+    const text = await resp.text();
+    if(cachedHTML && cachedHTML !== text) location.reload();
+    cachedHTML = text;
+  } catch(err){ console.error("Update check failed:",err); }
 }
-setInterval(checkWebsiteUpdate,1000);
-
-// Accessibility: Enter selects version
-versionLinks.forEach(a=>{
-  a.setAttribute('tabindex','0');
-  a.addEventListener('keypress', ev => { if(ev.key==='Enter') a.click(); });
-});
+setInterval(checkWebsiteUpdate, 1000);
 </script>
-
 </body>
 </html>
