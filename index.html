@@ -10,17 +10,16 @@
 
 <div class="launcher-container">
 
-  <!-- Main UI -->
   <div class="main-content">
 
-    <!-- Versions panel -->
+    <!-- Versions panel (newest first) -->
     <div class="versions-panel" role="navigation" aria-label="Versions">
       <h2>Versions</h2>
       <div class="versions-scroll">
-        <a href="AGoH (V1.00).html">AGoH (V1.00)</a>
-        <a href="AGoH (V1.01).html">AGoH (V1.01)</a>
-        <a href="AGoH (V1.02).html">AGoH (V1.02)</a>
         <a href="AGoH (V1.03).html">AGoH (V1.03)</a>
+        <a href="AGoH (V1.02).html">AGoH (V1.02)</a>
+        <a href="AGoH (V1.01).html">AGoH (V1.01)</a>
+        <a href="AGoH (V1.00).html">AGoH (V1.00)</a>
       </div>
     </div>
 
@@ -36,14 +35,14 @@
         </p>
       </div>
 
-      <!-- Update log -->
+      <!-- Update log (newest first) -->
       <div class="update-log">
         <h3>Update Log</h3>
         <ul>
-          <li>V1.00 – Initial release.</li>
-          <li>V1.01 – Added new final boss, along with speedrun button.</li>
-          <li>V1.02 – Added a new floor.</li>
           <li>V1.03 – Added two new items, Radar and Battery, along with dialogue bugfix.</li>
+          <li>V1.02 – Added a new floor.</li>
+          <li>V1.01 – Added new final boss, along with speedrun button.</li>
+          <li>V1.00 – Initial release.</li>
         </ul>
       </div>
 
@@ -52,18 +51,18 @@
         Play Selected Version
       </a>
 
-    </div>
-  </div>
+      <!-- Game iframe docked below -->
+      <div id="game-container" class="game-container hidden" aria-hidden="true">
+        <iframe id="game-frame" src="" frameborder="0" allow="autoplay; fullscreen"></iframe>
+        <div class="game-controls">
+          <span class="fullscreen-hint">Press <strong>F10</strong> to toggle fullscreen</span>
+          <button id="close-game" class="icon-btn" title="Close game">✕</button>
+        </div>
+      </div>
 
-  <!-- Game dock -->
-  <div id="game-container" class="game-container hidden" aria-hidden="true">
-    <iframe id="game-frame" src="" frameborder="0" allow="autoplay; fullscreen"></iframe>
-    <div class="game-controls">
-      <span class="fullscreen-hint">Press <strong>F10</strong> to toggle fullscreen</span>
-      <button id="close-game" class="icon-btn" title="Close game">✕</button>
     </div>
-  </div>
 
+  </div>
 </div>
 
 <!-- === Script === -->
@@ -74,7 +73,7 @@
   const gameFrame = document.getElementById('game-frame');
   const closeGameBtn = document.getElementById('close-game');
 
-  // Version selector
+  // Version selection
   versionLinks.forEach(link => {
     link.addEventListener('click', e => {
       e.preventDefault();
@@ -90,10 +89,11 @@
     });
   });
 
-  // Play button
+  // Play button: load game and auto fullscreen
   playButton.addEventListener('click', async e => {
     e.preventDefault();
     if (playButton.classList.contains('disabled')) return;
+
     const file = playButton.dataset.file;
     if (!file) return;
 
@@ -101,13 +101,11 @@
     gameContainer.classList.remove('hidden');
     gameContainer.setAttribute('aria-hidden', 'false');
 
-    // Try auto fullscreen
     try {
       await gameContainer.requestFullscreen();
       gameContainer.classList.add('fullscreen');
-    } catch (err) {
-      console.warn("Fullscreen request failed, fallback:", err);
-      gameContainer.classList.remove('fullscreen');
+    } catch(err) {
+      gameContainer.classList.remove('fullscreen'); // fallback
     }
   });
 
@@ -116,13 +114,11 @@
     gameContainer.classList.add('hidden');
     gameContainer.setAttribute('aria-hidden', 'true');
     gameFrame.src = '';
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(() => {});
-    }
+    if (document.fullscreenElement) document.exitFullscreen().catch(()=>{});
     gameContainer.classList.remove('fullscreen');
   });
 
-  // Toggle fullscreen with F10
+  // F10 toggle fullscreen
   document.addEventListener('keydown', async e => {
     if (e.key === 'F10' || e.keyCode === 121) {
       e.preventDefault();
@@ -135,44 +131,36 @@
           await document.exitFullscreen();
           gameContainer.classList.remove('fullscreen');
         }
-      } catch (err) {
-        console.error("Fullscreen toggle failed:", err);
+      } catch(err){
         gameContainer.classList.toggle('fullscreen');
       }
     }
   });
 
-  // Keep CSS in sync when exiting fullscreen manually
   document.addEventListener('fullscreenchange', () => {
-    if (!document.fullscreenElement) {
-      gameContainer.classList.remove('fullscreen');
-    }
+    if (!document.fullscreenElement) gameContainer.classList.remove('fullscreen');
   });
 
-  // Auto-refresh on updates
+  // Auto-refresh
   let cachedHTML = null;
   async function checkWebsiteUpdate() {
     try {
-      const resp = await fetch(window.location.href, { cache: "no-store" });
+      const resp = await fetch(window.location.href,{cache:"no-store"});
       const text = await resp.text();
-      if (cachedHTML && cachedHTML !== text) {
-        location.reload();
-      }
-      cachedHTML = text;
-    } catch (err) {
-      console.error("Update check failed:", err);
-    }
+      if(cachedHTML && cachedHTML!==text) location.reload();
+      cachedHTML=text;
+    } catch(err){ console.error("Update check failed:",err); }
   }
-  setInterval(checkWebsiteUpdate, 1);
+  setInterval(checkWebsiteUpdate,1000);
 
-  // Accessibility: Enter key on version items
-  versionLinks.forEach(a => {
-    a.setAttribute('tabindex', '0');
-    a.addEventListener('keypress', ev => {
-      if (ev.key === 'Enter') a.click();
-    });
+  // Accessibility: Enter selects version
+  versionLinks.forEach(a=>{
+    a.setAttribute('tabindex','0');
+    a.addEventListener('keypress', ev => { if(ev.key==='Enter') a.click(); });
   });
 </script>
 
 </body>
+</html>
+
 </html>
