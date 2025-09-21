@@ -16,7 +16,6 @@
     </p>
 
     <div class="content">
-      <!-- Version Selector -->
       <div class="versions">
         <h2>Versions</h2>
         <ul id="versionList">
@@ -27,17 +26,15 @@
         </ul>
       </div>
 
-      <!-- Description + Buttons -->
       <div class="info">
         <h2 id="versionTitle">Select a version</h2>
         <div class="buttons">
           <button id="playBtn" disabled>Play Selected Version</button>
           <a id="downloadHtmlBtn" class="download-btn disabled" href="#" download>Download HTML</a>
           <a id="downloadSb3Btn" class="download-btn disabled" href="#" download>Download SB3</a>
-          <a href="https://ax-archives.github.io/Archives" class="return-btn">Return to Homepage</a>
+          <a href="https://ax-archives.github.io/" class="return-btn">Return to Homepage</a>
         </div>
 
-        <!-- Update Log -->
         <div class="update-log">
           <h2>Update Log</h2>
           <ul>
@@ -50,7 +47,6 @@
       </div>
     </div>
 
-    <!-- Game Frame -->
     <div class="game-container">
       <iframe id="gameFrame" src="" frameborder="0"></iframe>
     </div>
@@ -81,8 +77,8 @@
         downloadHtmlBtn.href = `AGoH (${selectedVersion}).html`;
         downloadHtmlBtn.setAttribute("download", `AGoH (${selectedVersion}).html`);
 
-        downloadSb3Btn.href = `AGoH ${selectedVersion}.sb3`;
-        downloadSb3Btn.setAttribute("download", `AGoH ${selectedVersion}.sb3`);
+        downloadSb3Btn.href = `AGoH (${selectedVersion}).sb3`;
+        downloadSb3Btn.setAttribute("download", `AGoH (${selectedVersion}).sb3`);
       });
     });
 
@@ -92,7 +88,7 @@
       }
     });
 
-    // Toggle fullscreen on F10
+    // Fullscreen toggle with F10
     document.addEventListener("keydown", (e) => {
       if (e.code === "F10") {
         if (!document.fullscreenElement) {
