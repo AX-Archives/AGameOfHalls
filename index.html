@@ -35,8 +35,7 @@
           <a id="downloadHtmlBtn" class="download-btn disabled" href="#" download>Download HTML</a>
           <a id="downloadSb3Btn" class="download-btn disabled" href="#" download>Download SB3</a>
           <a href="https://ax-archives.github.io/" class="return-btn">Return to Homepage</a>
-      </div>
-
+        </div>
 
         <!-- Update Log -->
         <div class="update-log">
@@ -60,7 +59,8 @@
   <script>
     const versionList = document.querySelectorAll("#versionList li");
     const playBtn = document.getElementById("playBtn");
-    const downloadBtn = document.getElementById("downloadBtn");
+    const downloadHtmlBtn = document.getElementById("downloadHtmlBtn");
+    const downloadSb3Btn = document.getElementById("downloadSb3Btn");
     const gameFrame = document.getElementById("gameFrame");
 
     let selectedVersion = null;
@@ -74,11 +74,15 @@
 
         // Enable buttons
         playBtn.disabled = false;
-        downloadBtn.classList.remove("disabled");
+        downloadHtmlBtn.classList.remove("disabled");
+        downloadSb3Btn.classList.remove("disabled");
 
-        // Set download link
-        downloadBtn.href = `AGoH (${selectedVersion}).html`;
-        downloadBtn.setAttribute("download", `AGoH (${selectedVersion}).html`);
+        // Set download links
+        downloadHtmlBtn.href = `AGoH (${selectedVersion}).html`;
+        downloadHtmlBtn.setAttribute("download", `AGoH (${selectedVersion}).html`);
+
+        downloadSb3Btn.href = `AGoH (${selectedVersion}).sb3`;
+        downloadSb3Btn.setAttribute("download", `AGoH (${selectedVersion}).sb3`);
       });
     });
 
