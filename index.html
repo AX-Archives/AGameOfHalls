@@ -24,12 +24,17 @@
       </div>
     </div>
 
-    <!-- Description box -->
-    <div class="description-box">
-      <h2>Description</h2>
-      <p>
-        AGoH and related games are primarily compiled by “AX-Archives”; any similar titles by accounts using this name are associated. In AGoH, you traverse intricate halls, face challenges, and ultimately meet your fate in a journey of exploration and consequence.
-      </p>
+    <!-- Right-side UI -->
+    <div class="right-panel">
+
+      <!-- Description -->
+      <div class="description-box">
+        <h2>Description</h2>
+        <p>
+          AGoH and related games are primarily compiled by “AX-Archives”; any similar titles by accounts using this name are associated.  
+          In AGoH, you traverse intricate halls, face challenges, and ultimately meet your fate in a journey of exploration and consequence.
+        </p>
+      </div>
 
       <!-- Update log -->
       <div class="update-log">
@@ -38,7 +43,7 @@
           <li>V1.00 – Initial release.</li>
           <li>V1.01 – Added new final boss, along with speedrun button.</li>
           <li>V1.02 – Added a new floor.</li>
-          <li>V1.03 – Added two new items, Radar and Battery. Along with dialogue bugix.</li>
+          <li>V1.03 – Added two new items, Radar and Battery, along with dialogue bugfix.</li>
         </ul>
       </div>
 
@@ -48,12 +53,21 @@
 
   </div>
 
+  <!-- Game embed (hidden until Play is pressed) -->
+  <div id="game-container" class="game-container hidden">
+    <iframe id="game-frame" src="" frameborder="0"></iframe>
+    <p class="fullscreen-hint">Press <strong>F</strong> to toggle fullscreen</p>
+  </div>
+
 </div>
 
 <script>
   const playButton = document.getElementById('play-button');
   const versionLinks = document.querySelectorAll('.versions-scroll a');
+  const gameContainer = document.getElementById('game-container');
+  const gameFrame = document.getElementById('game-frame');
 
+  // Handle version selection
   versionLinks.forEach(link => {
     link.addEventListener('click', e => {
       e.preventDefault();
@@ -64,31 +78,46 @@
       link.classList.add('selected');
 
       playButton.classList.remove('disabled');
-      playButton.setAttribute('href', file);
+      playButton.dataset.file = file;
       playButton.textContent = `Play Selected Version ${versionText}`;
     });
   });
 
-  // --- Auto-refresh if website changes ---
-  let cachedHTML = null;
+  // Play button loads game into iframe
+  playButton.addEventListener('click', e => {
+    e.preventDefault();
+    if (playButton.classList.contains('disabled')) return;
 
+    const file = playButton.dataset.file;
+    if (file) {
+      gameFrame.src = file;
+      gameContainer.classList.remove('hidden');
+    }
+  });
+
+  // Toggle fullscreen on "F"
+  document.addEventListener('keydown', e => {
+    if (e.key.toLowerCase() === 'f') {
+      if (!document.fullscreenElement) {
+        gameContainer.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  });
+
+  // --- Auto-refresh if site changes ---
+  let cachedHTML = null;
   async function checkWebsiteUpdate() {
     try {
       const response = await fetch(window.location.href, { cache: "no-store" });
       const text = await response.text();
-
-      if (cachedHTML && cachedHTML !== text) {
-        location.reload();
-      }
+      if (cachedHTML && cachedHTML !== text) location.reload();
       cachedHTML = text;
-    } catch (err) {
-      console.error("Could not check website update:", err);
-    }
+    } catch (err) { console.error("Update check failed:", err); }
   }
-
   setInterval(checkWebsiteUpdate, 1000);
 </script>
 
 </body>
 </html>
-
