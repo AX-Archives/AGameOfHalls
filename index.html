@@ -1,21 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AGoH - Launcher</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="launcher-container">
+
+  <!-- Main UI -->
+  <div class="main-content">
+
+    <!-- Versions panel -->
+    <div class="versions-panel" role="navigation" aria-label="Versions">
+      <h2>Versions</h2>
+      <div class="versions-scroll">
+        <a href="AGoH (V1.00).html">AGoH (V1.00)</a>
+        <a href="AGoH (V1.01).html">AGoH (V1.01)</a>
+        <a href="AGoH (V1.02).html">AGoH (V1.02)</a>
+        <a href="AGoH (V1.03).html">AGoH (V1.03)</a>
+      </div>
+    </div>
+
+    <!-- Right-side UI -->
+    <div class="right-panel">
+
+      <!-- Description -->
+      <div class="description-box">
+        <h2>Description</h2>
+        <p>
+          AGoH and related games are primarily compiled by “AX-Archives”; any similar titles by accounts using this name are associated.
+          In AGoH, you traverse intricate halls, face challenges, and ultimately meet your fate in a journey of exploration and consequence.
+        </p>
+      </div>
+
+      <!-- Update log -->
+      <div class="update-log">
+        <h3>Update Log</h3>
+        <ul>
+          <li>V1.00 – Initial release.</li>
+          <li>V1.01 – Added new final boss, along with speedrun button.</li>
+          <li>V1.02 – Added a new floor.</li>
+          <li>V1.03 – Added two new items, Radar and Battery, along with dialogue bugfix.</li>
+        </ul>
+      </div>
+
+      <!-- Play button -->
+      <a id="play-button" class="play-button disabled" href="#" role="button" aria-disabled="true">
+        Play Selected Version
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Game dock -->
+  <div id="game-container" class="game-container hidden" aria-hidden="true">
+    <iframe id="game-frame" src="" frameborder="0" allow="autoplay; fullscreen"></iframe>
+    <div class="game-controls">
+      <span class="fullscreen-hint">Press <strong>F10</strong> to toggle fullscreen</span>
+      <button id="close-game" class="icon-btn" title="Close game">✕</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- === Script === -->
 <script>
-  // Elements
   const playButton = document.getElementById('play-button');
   const versionLinks = document.querySelectorAll('.versions-scroll a');
   const gameContainer = document.getElementById('game-container');
   const gameFrame = document.getElementById('game-frame');
   const closeGameBtn = document.getElementById('close-game');
 
-  // Handle version selection
+  // Version selector
   versionLinks.forEach(link => {
     link.addEventListener('click', e => {
       e.preventDefault();
-
-      // Clear other selections
       versionLinks.forEach(v => v.classList.remove('selected'));
       link.classList.add('selected');
 
-      // Enable play button
       const file = link.getAttribute('href');
       const versionText = link.textContent.replace("AGoH ", "");
       playButton.classList.remove('disabled');
@@ -25,25 +90,23 @@
     });
   });
 
-  // Play button: load and fullscreen game
+  // Play button
   playButton.addEventListener('click', async e => {
     e.preventDefault();
     if (playButton.classList.contains('disabled')) return;
-
     const file = playButton.dataset.file;
     if (!file) return;
 
-    // Load game
     gameFrame.src = file;
     gameContainer.classList.remove('hidden');
     gameContainer.setAttribute('aria-hidden', 'false');
 
-    // Try to immediately fullscreen
+    // Try auto fullscreen
     try {
       await gameContainer.requestFullscreen();
       gameContainer.classList.add('fullscreen');
     } catch (err) {
-      console.warn("Fullscreen request failed, fallback to docked:", err);
+      console.warn("Fullscreen request failed, fallback:", err);
       gameContainer.classList.remove('fullscreen');
     }
   });
@@ -52,19 +115,18 @@
   closeGameBtn.addEventListener('click', () => {
     gameContainer.classList.add('hidden');
     gameContainer.setAttribute('aria-hidden', 'true');
-    gameFrame.src = ''; // stop game
+    gameFrame.src = '';
     if (document.fullscreenElement) {
       document.exitFullscreen().catch(() => {});
     }
     gameContainer.classList.remove('fullscreen');
   });
 
-  // Toggle fullscreen on F10
+  // Toggle fullscreen with F10
   document.addEventListener('keydown', async e => {
     if (e.key === 'F10' || e.keyCode === 121) {
       e.preventDefault();
       if (gameContainer.classList.contains('hidden')) return;
-
       try {
         if (!document.fullscreenElement) {
           await gameContainer.requestFullscreen();
@@ -80,14 +142,14 @@
     }
   });
 
-  // Sync CSS class if user exits fullscreen manually
+  // Keep CSS in sync when exiting fullscreen manually
   document.addEventListener('fullscreenchange', () => {
     if (!document.fullscreenElement) {
       gameContainer.classList.remove('fullscreen');
     }
   });
 
-  // Auto-refresh if site changes
+  // Auto-refresh on updates
   let cachedHTML = null;
   async function checkWebsiteUpdate() {
     try {
@@ -101,9 +163,9 @@
       console.error("Update check failed:", err);
     }
   }
-  setInterval(checkWebsiteUpdate, 1000);
+  setInterval(checkWebsiteUpdate, 1);
 
-  // Accessibility: Enter key selects versions
+  // Accessibility: Enter key on version items
   versionLinks.forEach(a => {
     a.setAttribute('tabindex', '0');
     a.addEventListener('keypress', ev => {
@@ -111,3 +173,6 @@
     });
   });
 </script>
+
+</body>
+</html>
